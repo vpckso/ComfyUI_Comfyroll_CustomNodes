@@ -104,6 +104,7 @@ class CR_PromptList:
                              "append_text": ("STRING", {"multiline": False, "default": ""}),
                              "start_index": ("INT", {"default": 0, "min": 0, "max": 9999}),
                              "max_rows": ("INT", {"default": 1000, "min": 1, "max": 9999}),
+                             "repeat": ("INT", {"default": 1, "min": 1, "max": 100}),
                             }
         }
 
@@ -113,7 +114,7 @@ class CR_PromptList:
     FUNCTION = "make_list"
     CATEGORY = icons.get("Comfyroll/List")
 
-    def make_list(self, multiline_text, prepend_text="", append_text="", start_index=0, max_rows=9999):
+    def make_list(self, multiline_text, prepend_text="", append_text="", start_index=0, max_rows=9999, repeat=1):
 
         show_help = "https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes/wiki/List-Nodes#cr-prompt-list"
 
@@ -127,7 +128,7 @@ class CR_PromptList:
 
         # Extract the desired portion of the list
         selected_rows = lines[start_index:end_index]
-        prompt_list_out = [prepend_text + line + append_text for line in selected_rows]
+        prompt_list_out = [prepend_text + line + append_text for line in selected_rows for _ in range(repeat)]
         body_list_out = selected_rows          
 
         return (prompt_list_out, body_list_out, show_help, )
